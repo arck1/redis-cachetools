@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "redis-cachetools"
+version = "0.1.0"
+description = ""
+authors = ["arck1 <a.v.rakhimov@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+cachetools = "^4.2.0"
+redis = "^3.5.3"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
