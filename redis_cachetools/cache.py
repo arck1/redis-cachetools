@@ -13,7 +13,7 @@ class RedisCache(Cache):
     def __init__(
         self,
         *,
-        maxsize: int,
+        maxsize: int = 1024,
         namespace: str = "redis_cache",
         client: redis.Redis = None,
         serialize: Callable = None,
@@ -23,7 +23,7 @@ class RedisCache(Cache):
         self.__namespace = namespace
         self.__maxsize = maxsize
 
-        self.__client = client or redis.Redis()
+        self.client = client or redis.Redis()
 
         if serialize is not None and callable(serialize):
             if not callable(serialize):
@@ -40,7 +40,7 @@ class RedisCache(Cache):
 
     def __getitem__(self, key: str):
         try:
-            val = self.__client.get(str(key))
+            val = self.client.get(str(key))
             if val:
                 return self.deserialize(val)
             else:
@@ -52,22 +52,22 @@ class RedisCache(Cache):
         while len(self) + 1 > self.__maxsize:
             self.popitem()
 
-        self.__client.set(str(key), self.serialize(value))
+        self.client.set(str(key), self.serialize(value))
 
     def __delitem__(self, key: str):
-        self.__client.delete(str(key))
+        self.client.delete(str(key))
 
     def __contains__(self, key: str):
-        return self.__client.exists(str(key)) == 1
+        return self.client.exists(str(key)) == 1
 
     def __missing__(self, key: str):
         raise KeyError(key)
 
     def __iter__(self):
-        return self.__client.scan_iter(match=self.__namespace + "*")
+        return self.client.scan_iter(match=self.__namespace + "*")
 
     def __len__(self):
-        return len(self.__client.keys(pattern=self.__namespace + "*"))
+        return len(self.client.keys(pattern=self.__namespace + "*"))
 
     def clear(self):
         for key in self:

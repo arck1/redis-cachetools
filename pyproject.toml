@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "redis-cachetools"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["arck1 <a.v.rakhimov@gmail.com>"]
 
@@ -10,6 +10,7 @@ cachetools = "^4.2.0"
 redis = "^3.5.3"
 
 [tool.poetry.dev-dependencies]
+pytest = "^6.2.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
